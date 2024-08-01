@@ -1,0 +1,10 @@
+
+/.vs
+/bin-obj
+/bin
+*.vcxproj
+*.filters
+*.user
+Premake5.lua
+*.sln
+/Venders
