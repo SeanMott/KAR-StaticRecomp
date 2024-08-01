@@ -33,19 +33,10 @@ includedirs
 {
     "KAR/includes",
     "KARCommon/includes",
-
-    "Venders/SDL/include",
-    "Venders/FMT/include",
-    "Venders/GLM",
-    "Venders/STB",
-
-    "Venders/VKBootstrap/src",
-    "Venders/VMA/include",
-    --"Venders/Volk",
-    --"Venders/VulkanHeaders/include",
     "C:/VulkanSDK/1.3.283.0/Include",
 
-    "Venders/ImGUI"
+"Venders/SDL/include","Venders/FMT/include","Venders/GLM","Venders/STB","Venders/VKBootstrap/src",
+    "Venders/VMA/include","Venders/ImGUI"
 }
 
 links
@@ -180,18 +171,10 @@ includedirs
 {
     "KARCommon/includes",
 
-    "Venders/SDL/include",
-    "Venders/FMT/include",
-    "Venders/GLM",
-    "Venders/STB",
+"C:/VulkanSDK/1.3.283.0/Include",
 
-    "Venders/VKBootstrap/src",
-    "Venders/VMA/include",
-    --"Venders/Volk",
-    --"Venders/VulkanHeaders/include",
-    "C:/VulkanSDK/1.3.283.0/Include",
-
-    "Venders/ImGUI"
+"Venders/SDL/include","Venders/FMT/include","Venders/GLM","Venders/STB","Venders/VKBootstrap/src",
+    "Venders/VMA/include","Venders/ImGUI"
 }
 
 links

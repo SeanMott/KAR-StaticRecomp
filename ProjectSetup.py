@@ -2,65 +2,34 @@
 Sets up the project and gathers all the dependices and compiles the ones that are needed
 """
 
+import sys
+
+sys.path.insert(1, "BTDScripts")
+import Dep_FMT
+import Dep_GLM
+import Dep_STB
+import Dep_SDL
+import Dep_Vulkan
+import Dep_ImGUI
+
 import subprocess
 import os
 
 #get repos
-SDL_GIT_REPO_LINK = "https://github.com/libsdl-org/SDL.git"
-FMT_GIT_REPO_LINK = "https://github.com/fmtlib/fmt.git"
-GLM_GIT_REPO_LINK = "https://github.com/g-truc/glm.git"
 YAML_CPP_GIT_REPO_LINK = "https://github.com/jbeder/yaml-cpp.git"
-STB_GIT_REPO_LINK = "https://github.com/nothings/stb.git"
 
-VULKAN_HEADERS_GIT_REPO_LINK = "https://github.com/KhronosGroup/Vulkan-Headers.git"
-VMA_GIT_REPO_LINK = "https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator.git"
-VOLK_GIT_REPO_LINK = "https://github.com/zeux/volk.git"
-BOOTSTRAPPER_GIT_REPO_LINK = "https://github.com/charles-lunarg/vk-bootstrap.git"
-
-IMGUI_GIT_REPO_LINK = "https://github.com/ocornut/imgui.git"
-
-#if the folder doesn't exist, we download it
-def GetIfNotThere(URL, outputDir):
-    if not os.path.exists(outputDir):
-        subprocess.run(["git", "clone", URL, outputDir],
-        shell=True)
-
-#gets SDL 3
-GetIfNotThere(SDL_GIT_REPO_LINK, "Venders/SDL")
-
-#builds SDL 3
-subprocess.run(["cmake", "-S", "Venders/SDL", "-B", "Venders/SDL/Build"],
-        shell=True)
-subprocess.run(["msbuild", "Venders/SDL/Build/SDL2.sln", "-maxCpuCount:4", "/property:Configuration=Release"],
-        shell=True)
-subprocess.run(["msbuild", "Venders/SDL/Build/SDL2.sln", "-maxCpuCount:4", "/property:Configuration=MinSizeRel"],
-        shell=True)
-subprocess.run(["msbuild", "Venders/SDL/Build/SDL2.sln", "-maxCpuCount:4", "/property:Configuration=RelWithDebInfo"],
-        shell=True)
+Dep_SDL.GetDep_SDL() #gets SDL
+Dep_SDL.Build_SDL() #builds SDL
            
-#gets FMT
-GetIfNotThere(FMT_GIT_REPO_LINK, "Venders/FMT")
+Dep_FMT.GetDep_FMT() #gets FMT
 
-#gets GLM
-GetIfNotThere(GLM_GIT_REPO_LINK, "Venders/GLM")
+Dep_GLM.GetDep_GLM() #gets GLM
 
-#gets STB
-GetIfNotThere(STB_GIT_REPO_LINK, "Venders/STB")
+Dep_STB.GetDep_STB() #gets STB
 
-#gets Vulkan headers
-#GetIfNotThere(VULKAN_HEADERS_GIT_REPO_LINK, "Venders/VulkanHeaders")
+Dep_Vulkan.GetDep_VulkanLibraries() #gets VMA and Bootstrapper
 
-#gets VMA
-GetIfNotThere(VMA_GIT_REPO_LINK, "Venders/VMA")
-
-#gets Volk
-GetIfNotThere(VOLK_GIT_REPO_LINK, "Venders/Volk")
-
-#gets Bootstrapper
-GetIfNotThere(BOOTSTRAPPER_GIT_REPO_LINK, "Venders/VKBootstrap")
-
-#gets ImGUI
-GetIfNotThere(IMGUI_GIT_REPO_LINK, "Venders/ImGUI")
+Dep_ImGUI.GetDep_ImGUI() #gets ImGUI
 
 #generate Premake file
 premakeCode = """
@@ -98,19 +67,9 @@ includedirs
 {
     "KAR/includes",
     "KARCommon/includes",
-
-    "Venders/SDL/include",
-    "Venders/FMT/include",
-    "Venders/GLM",
-    "Venders/STB",
-
-    "Venders/VKBootstrap/src",
-    "Venders/VMA/include",
-    --"Venders/Volk",
-    --"Venders/VulkanHeaders/include",
     "C:/VulkanSDK/1.3.283.0/Include",
 
-    "Venders/ImGUI"
+""" + Dep_SDL.GeneratePremake_IncludePath() + Dep_FMT.GeneratePremake_IncludePath() + Dep_GLM.GeneratePremake_IncludePath() + Dep_STB.GeneratePremake_IncludePath() + Dep_Vulkan.GeneratePremake_IncludePath() + Dep_ImGUI.GeneratePremake_IncludePath() + """
 }
 
 links
@@ -245,18 +204,9 @@ includedirs
 {
     "KARCommon/includes",
 
-    "Venders/SDL/include",
-    "Venders/FMT/include",
-    "Venders/GLM",
-    "Venders/STB",
+"C:/VulkanSDK/1.3.283.0/Include",
 
-    "Venders/VKBootstrap/src",
-    "Venders/VMA/include",
-    --"Venders/Volk",
-    --"Venders/VulkanHeaders/include",
-    "C:/VulkanSDK/1.3.283.0/Include",
-
-    "Venders/ImGUI"
+""" + Dep_SDL.GeneratePremake_IncludePath() + Dep_FMT.GeneratePremake_IncludePath() + Dep_GLM.GeneratePremake_IncludePath() + Dep_STB.GeneratePremake_IncludePath() + Dep_Vulkan.GeneratePremake_IncludePath() + Dep_ImGUI.GeneratePremake_IncludePath() + """
 }
 
 links
